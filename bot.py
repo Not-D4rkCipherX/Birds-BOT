@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import urllib.parse
 from datetime import datetime
 import time
 from colorama import *
@@ -48,8 +49,23 @@ class Birds:
         hours, remainder = divmod(seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
+    
+    def load_data(self, query: str):
+        query_params = urllib.parse.parse_qs(query)
+        query = query_params.get('user', [None])[0]
+
+        if query:
+            user_data_json = urllib.parse.unquote(query)
+            user_data = json.loads(user_data_json)
+            first_name = user_data['first_name']
+            last_name = user_data['last_name']
+            name = f"{first_name} {last_name}"
+            username = user_data['username']
+            return name, username
+        else:
+            raise ValueError("User data not found in query.")
         
-    def user(self, query: str):
+    def get_user(self, query: str):
         url = 'https://api.birds.dog/user'
         self. headers.update({
             'Telegramauth': f'tma {query}',
@@ -57,9 +73,28 @@ class Birds:
         })
 
         response = self.session.get(url, headers=self.headers)
-        response.raise_for_status()
-        return response.json()
-    
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except json.JSONDecodeError:
+                return None
+        else:
+            return None
+        
+    def post_user(self, query: str, name: str, username: str,):
+        url = 'https://api.birds.dog/user'
+        data = json.dumps({'name':name, 'referId':'1493482017', 'username':username })
+        self. headers.update({
+            'Telegramauth': f'tma {query}',
+            'Content-Type': 'application/json'
+        })
+
+        response = self.session.post(url, headers=self.headers, data=data)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return None
+        
     def worms_status(self, query: str):
         url = 'https://worm.birds.dog/worms/mint-status'
         self. headers.update({
@@ -212,7 +247,23 @@ class Birds:
     
     def process_query(self, query: str, upgarde_egg: bool):
 
-        user = self.user(query)
+        name, username = self.load_data(query)
+
+        user = self.get_user(query)
+        if not user:
+            create_user = self.post_user(query, name, username)
+            if create_user:
+                self.log(
+                    f"{Fore.MAGENTA+Style.BRIGHT}[ Account{Style.RESET_ALL}"
+                    f"{Fore.WHITE+Style.BRIGHT} {create_user['name']} {Style.RESET_ALL}"
+                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Balance{Style.RESET_ALL}"
+                    f"{Fore.WHITE+Style.BRIGHT} {create_user['balance']} Birds {Style.RESET_ALL}"
+                    f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                )
+            user = self.get_user(query)
+
+        time.sleep(1)
+
         if user:
             self.log(
                 f"{Fore.MAGENTA+Style.BRIGHT}[ Account{Style.RESET_ALL}"
@@ -263,7 +314,6 @@ class Birds:
                 )
 
             if upgarde_egg:
-
                 incubate = self.incubate_info(query)
                 if not incubate:
                     upgrade = self.incubate_upgrade(query)
@@ -444,15 +494,12 @@ class Birds:
             else:
                 self.log(f"{Fore.RED+Style.BRIGHT}[ Failed to Join Egg Breaking ]{Style.RESET_ALL}")
 
-        else:
-            self.log(f"{Fore.RED+Style.BRIGHT}[ Query Mati ]{Style.RESET_ALL}")
-
     def main(self):
         try:
             with open('query.txt', 'r') as file:
                 queries = [line.strip() for line in file if line.strip()]
 
-            upgarde_egg = self.question()
+            upgrade_egg = self.question()
 
             while True:
                 self.clear_terminal()
@@ -467,7 +514,7 @@ class Birds:
                 for query in queries:
                     query = query.strip()
                     if query:
-                        self.process_query(query, upgarde_egg)
+                        self.process_query(query, upgrade_egg)
                         self.log(f"{Fore.CYAN+Style.BRIGHT}-------------------------------------------------------------------------{Style.RESET_ALL}")
 
                 seconds = 1800
