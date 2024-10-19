@@ -208,7 +208,7 @@ class Birds:
             else:
                 print(f"{Fore.RED+Style.BRIGHT}Invalid Input.{Fore.WHITE+Style.BRIGHT} Choose 'y' to Yes or 'n' to Skip.{Style.RESET_ALL}")
 
-        return 
+        return upgrade_egg
     
     def process_query(self, query: str, upgarde_egg: bool):
 
