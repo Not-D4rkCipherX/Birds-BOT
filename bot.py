@@ -208,6 +208,19 @@ class Birds:
         else:
             return None
         
+    def egg_claim(self, query: str):
+        url = 'https://api.birds.dog/minigame/egg/claim'
+        self. headers.update({
+            'Telegramauth': f'tma {query}',
+            'Content-Type': 'application/json'
+        })
+
+        response = self.session.get(url, headers=self.headers)
+        if response.status_code == 200:
+            return True
+        else:
+            return False
+        
     def projects(self, query: str):
         url = 'https://api.birds.dog/project'
         self. headers.update({
@@ -313,6 +326,86 @@ class Birds:
                     f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                 )
 
+            join = self.egg_join(query)
+            if join:
+                turn = self.egg_turn(query)
+                if turn:
+                    count = turn['turn']
+                    if count > 0:
+                        self.log(
+                            f"{Fore.MAGENTA+Style.BRIGHT}[ Breaking Egg{Style.RESET_ALL}"
+                            f"{Fore.GREEN+Style.BRIGHT} Is Started {Style.RESET_ALL}"
+                            f"{Fore.MAGENTA+Style.BRIGHT}] [ Turn{Style.RESET_ALL}"
+                            f"{Fore.WHITE+Style.BRIGHT} {count} Left {Style.RESET_ALL}"
+                            f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                        )
+
+                        while count > 0:
+                            join = self.egg_join(query)
+                            if not join:
+                                self.log(f"{Fore.RED+Style.BRIGHT}[ Failed to Join Egg Breaking ]{Style.RESET_ALL}")
+                                break
+
+                            turn = self.egg_turn(query)
+                            if not turn:
+                                self.log(f"{Fore.RED+Style.BRIGHT}[ Failed to Get Turn ]{Style.RESET_ALL}")
+                                break
+
+                            count = turn['turn']
+                            if count <= 0:
+                                self.log(
+                                    f"{Fore.MAGENTA+Style.BRIGHT}[ Breaking Egg{Style.RESET_ALL}"
+                                    f"{Fore.YELLOW+Style.BRIGHT} Isn't Started {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Reason{Style.RESET_ALL}"
+                                    f"{Fore.WHITE+Style.BRIGHT} {count} Turn Left {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                                )
+                                break
+
+                            play = self.egg_play(query)
+                            if play:
+                                self.log(
+                                    f"{Fore.MAGENTA+Style.BRIGHT}[ Breaking Egg{Style.RESET_ALL}"
+                                    f"{Fore.GREEN+Style.BRIGHT} Is Success {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Reward{Style.RESET_ALL}"
+                                    f"{Fore.WHITE+Style.BRIGHT} {play['result']} Birds {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Turn{Style.RESET_ALL}"
+                                    f"{Fore.WHITE+Style.BRIGHT} {play['turn']} Left {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                                )
+                                count -= 1
+                            else:
+                                break
+
+                        if count == 0:
+                            claim = self.egg_claim(query)
+                            if claim:
+                                self.log(
+                                    f"{Fore.MAGENTA+Style.BRIGHT}[ Breaking Egg{Style.RESET_ALL}"
+                                    f"{Fore.GREEN+Style.BRIGHT} Is Claimed {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Reward Total{Style.RESET_ALL}"
+                                    f"{Fore.WHITE+Style.BRIGHT} {turn['total']} Birds {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                                )
+                            else:
+                                self.log(
+                                    f"{Fore.MAGENTA+Style.BRIGHT}[ Breaking Egg{Style.RESET_ALL}"
+                                    f"{Fore.RED+Style.BRIGHT} Isn't Claimed {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                                )
+                    else:
+                        self.log(
+                            f"{Fore.MAGENTA+Style.BRIGHT}[ Breaking Egg{Style.RESET_ALL}"
+                            f"{Fore.YELLOW+Style.BRIGHT} Isn't Started {Style.RESET_ALL}"
+                            f"{Fore.MAGENTA+Style.BRIGHT}] [ Reason{Style.RESET_ALL}"
+                            f"{Fore.WHITE+Style.BRIGHT} {count} Turn Left {Style.RESET_ALL}"
+                            f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                        )
+                else:
+                    self.log(f"{Fore.RED+Style.BRIGHT}[ Failed to Get Turn ]{Style.RESET_ALL}")
+            else:
+                self.log(f"{Fore.RED+Style.BRIGHT}[ Failed to Join Egg Breaking ]{Style.RESET_ALL}")
+
             if upgarde_egg:
                 incubate = self.incubate_info(query)
                 if not incubate:
@@ -334,9 +427,13 @@ class Birds:
                     incubate = self.incubate_info(query)
 
                 if incubate:
+                    user = self.get_user(query)
+                    balance = user['balance']
                     self.log(
                         f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
                         f"{Fore.WHITE+Style.BRIGHT} Level {incubate['level']} {Style.RESET_ALL}"
+                        f"{Fore.MAGENTA+Style.BRIGHT}] [ Balance{Style.RESET_ALL}"
+                        f"{Fore.WHITE+Style.BRIGHT} {balance} Birds {Style.RESET_ALL}"
                         f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                     )
 
@@ -344,7 +441,7 @@ class Birds:
                     if status == "confirmed" and incubate['nextLevel']:
                         required_balance = incubate['nextLevel']['birds']
 
-                        if user['balance'] >= required_balance:
+                        if balance >= required_balance:
                             upgrade = self.incubate_upgrade(query)
                             if upgrade:
                                 upgrade_time = upgrade['upgradedAt'] / 1000
@@ -441,58 +538,6 @@ class Birds:
                     f"{Fore.YELLOW+Style.BRIGHT}Skipped{Style.RESET_ALL}"
                     f"{Fore.MAGENTA+Style.BRIGHT} ]{Style.RESET_ALL}"
                 )
-
-            join = self.egg_join(query)
-            if join:
-                turn = self.egg_turn(query)
-                if turn:
-                    count = turn['turn']
-                    if count > 0:
-                        self.log(
-                            f"{Fore.MAGENTA+Style.BRIGHT}[ Breaking Egg{Style.RESET_ALL}"
-                            f"{Fore.GREEN+Style.BRIGHT} Is Started {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA+Style.BRIGHT}] [ Turn{Style.RESET_ALL}"
-                            f"{Fore.WHITE+Style.BRIGHT} {count} Left {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
-                        )
-                        reward_total = 0
-                        while count > 0:
-                            play = self.egg_play(query)
-                            if play:
-                                self.log(
-                                    f"{Fore.MAGENTA+Style.BRIGHT}[ Breaking Egg{Style.RESET_ALL}"
-                                    f"{Fore.GREEN+Style.BRIGHT} Is Success {Style.RESET_ALL}"
-                                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Reward{Style.RESET_ALL}"
-                                    f"{Fore.WHITE+Style.BRIGHT} {play['result']} Birds {Style.RESET_ALL}"
-                                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Turn{Style.RESET_ALL}"
-                                    f"{Fore.WHITE+Style.BRIGHT} {play['turn']} Left {Style.RESET_ALL}"
-                                    f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
-                                )
-                                reward_total += play['result']
-                                count -= 1
-                            else:
-                                break
-                    
-                        if count == 0:
-                            self.log(
-                                f"{Fore.MAGENTA+Style.BRIGHT}[ Breaking Egg{Style.RESET_ALL}"
-                                f"{Fore.GREEN+Style.BRIGHT} Is Completed {Style.RESET_ALL}"
-                                f"{Fore.MAGENTA+Style.BRIGHT}] [ Reward Total{Style.RESET_ALL}"
-                                f"{Fore.WHITE+Style.BRIGHT} {reward_total} Birds {Style.RESET_ALL}"
-                                f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
-                            )
-                    else:
-                        self.log(
-                            f"{Fore.MAGENTA+Style.BRIGHT}[ Breaking Egg{Style.RESET_ALL}"
-                            f"{Fore.YELLOW+Style.BRIGHT} Isn't Started {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA+Style.BRIGHT}] [ Reason{Style.RESET_ALL}"
-                            f"{Fore.WHITE+Style.BRIGHT} {count} Turn Left {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
-                        )
-                else:
-                    self.log(f"{Fore.RED+Style.BRIGHT}[ Failed to Get Turn ]{Style.RESET_ALL}")
-            else:
-                self.log(f"{Fore.RED+Style.BRIGHT}[ Failed to Join Egg Breaking ]{Style.RESET_ALL}")
 
     def main(self):
         try:
