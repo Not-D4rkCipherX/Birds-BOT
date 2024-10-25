@@ -377,6 +377,8 @@ class Birds:
                             else:
                                 break
 
+                            time.sleep(1)
+
                         if count == 0:
                             claim = self.egg_claim(query)
                             if claim:
@@ -453,7 +455,7 @@ class Birds:
                                     f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
                                     f"{Fore.GREEN+Style.BRIGHT} Is Incubated {Style.RESET_ALL}"
                                     f"{Fore.MAGENTA+Style.BRIGHT}] [ Complete at{Style.RESET_ALL}"
-                                    f"{Fore.MAGENTA+Style.BRIGHT} {complete_incubate_wib} {Style.RESET_ALL}"
+                                    f"{Fore.WHITE+Style.BRIGHT} {complete_incubate_wib} {Style.RESET_ALL}"
                                     f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                                 )
                         else:
@@ -560,6 +562,7 @@ class Birds:
                     query = query.strip()
                     if query:
                         self.process_query(query, upgrade_egg)
+                        time.sleep(3)
                         self.log(f"{Fore.CYAN+Style.BRIGHT}-------------------------------------------------------------------------{Style.RESET_ALL}")
 
                 seconds = 1800
