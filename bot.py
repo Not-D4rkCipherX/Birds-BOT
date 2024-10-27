@@ -65,23 +65,40 @@ class Birds:
         else:
             raise ValueError("User data not found in query.")
         
-    def get_user(self, query: str):
+    def get_user(self, query: str, retries=3):
         url = 'https://api.birds.dog/user'
         self. headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
 
-        response = self.session.get(url, headers=self.headers)
-        if response.status_code == 200:
+        for attempt in range(retries):
             try:
-                return response.json()
-            except json.JSONDecodeError:
-                return None
-        else:
-            return None
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    try:
+                        return response.json()
+                    except json.JSONDecodeError:
+                        return None
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
-    def post_user(self, query: str, name: str, username: str,):
+    def post_user(self, query: str, name: str, username: str, retries=3):
         url = 'https://api.birds.dog/user'
         data = json.dumps({'name':name, 'referId':'1493482017', 'username':username })
         self. headers.update({
@@ -89,27 +106,61 @@ class Birds:
             'Content-Type': 'application/json'
         })
 
-        response = self.session.post(url, headers=self.headers, data=data)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return None
+        for attempt in range(retries):
+            try:
+                response = self.session.post(url, headers=self.headers, data=data)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    return response.json()
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
-    def worms_status(self, query: str):
+    def worms_status(self, query: str, retries=3):
         url = 'https://worm.birds.dog/worms/mint-status'
         self. headers.update({
             'Authorization': f'tma {query}',
             'Content-Type': 'application/json'
         })
 
-        response = self.session.get(url, headers=self.headers)
-        result = response.json()
-        if result['message'] == 'SUCCESS':
-            return result['data']
-        else:
-            return None
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                result = response.json()
+                if result['message'] == 'SUCCESS':
+                    return result['data']
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
-    def mint_worms(self, query: str):
+    def mint_worms(self, query: str, retries=3):
         url = 'https://worm.birds.dog/worms/mint'
         data = {}
         self. headers.update({
@@ -117,135 +168,244 @@ class Birds:
             'Content-Type': 'application/json'
         })
 
-        response = self.session.post(url, headers=self.headers, json=data)
-        result = response.json()
-        if result['message']:
-            return result
-        else:
-            return None
+        for attempt in range(retries):
+            try:
+                response = self.session.post(url, headers=self.headers, json=data)
+                response.raise_for_status()
+                result = response.json()
+                if result['message']:
+                    return result
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
-    def incubate_info(self, query: str):
+    def incubate_info(self, query: str, retries=3):
         url = 'https://api.birds.dog/minigame/incubate/info'
         self. headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
 
-        response = self.session.get(url, headers=self.headers)
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
 
-        if response.status_code != 200 or not response.text.strip():
-            return None
+                if response.status_code != 200 or not response.text.strip():
+                    return None
 
-        try:
-            return response.json()
-        except json.JSONDecodeError as e:
-            self.log(f"[ JSON Error ]: {e}")
-            return None
+                try:
+                    return response.json()
+                except json.JSONDecodeError as e:
+                    self.log(f"[ JSON Error ]: {e}")
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
-    def incubate_upgrade(self, query: str):
+    def incubate_upgrade(self, query: str, retries=3):
         url = 'https://api.birds.dog/minigame/incubate/upgrade'
         self. headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
 
-        response = self.session.get(url, headers=self.headers)
-        result = response.json()
-        if result:
-            return result
-        else:
-            return None
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                result = response.json()
+                if result:
+                    return result
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
-    def confirm_upgrade(self, query: str):
+    def confirm_upgrade(self, query: str, retries=3):
         url = 'https://api.birds.dog/minigame/incubate/confirm-upgraded'
         self. headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
 
-        response = self.session.post(url, headers=self.headers)
-        if response.status_code == 200:
-            return True
-        else:
-            return False
+        for attempt in range(retries):
+            try:
+                response = self.session.post(url, headers=self.headers)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    return True
+                else:
+                    return False
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
-    def egg_join(self, query: str):
+    def egg_join(self, query: str, retries=3):
         url = 'https://api.birds.dog/minigame/egg/join'
         self. headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
 
-        response = self.session.get(url, headers=self.headers)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return None
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    return response.json()
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
-    def egg_turn(self, query: str):
+    def egg_turn(self, query: str, retries=3):
         url = 'https://api.birds.dog/minigame/egg/turn'
         self. headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
 
-        response = self.session.get(url, headers=self.headers)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return None
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    return response.json()
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
-    def egg_play(self, query: str):
+    def egg_play(self, query: str, retries=3):
         url = 'https://api.birds.dog/minigame/egg/play'
         self. headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
 
-        response = self.session.get(url, headers=self.headers)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return None
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    return response.json()
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
-    def egg_claim(self, query: str):
+    def egg_claim(self, query: str, retries=3):
         url = 'https://api.birds.dog/minigame/egg/claim'
         self. headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
 
-        response = self.session.get(url, headers=self.headers)
-        if response.status_code == 200:
-            return True
-        else:
-            return False
-        
-    def projects(self, query: str):
-        url = 'https://api.birds.dog/project'
-        self. headers.update({
-            'Telegramauth': f'tma {query}',
-            'Content-Type': 'application/json'
-        })
-
-        response = self.session.get(url, headers=self.headers)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return None
-        
-    def join_tasks(self, query: str):
-        url = 'https://api.birds.dog/project/join-task'
-        self. headers.update({
-            'Telegramauth': f'tma {query}',
-            'Content-Type': 'application/json'
-        })
-
-        response = self.session.post(url, headers=self.headers)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return None
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    return True
+                else:
+                    return False
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
     def question(self):
         while True:
