@@ -723,14 +723,14 @@ class Birds:
                     f"{Fore.GREEN + Style.BRIGHT}Account's Total: {Style.RESET_ALL}"
                     f"{Fore.WHITE + Style.BRIGHT}{len(queries)}{Style.RESET_ALL}"
                 )
-                self.log(f"{Fore.CYAN + Style.BRIGHT}-------------------------------------------------------------------------{Style.RESET_ALL}")
+                self.log(f"{Fore.CYAN + Style.BRIGHT}-{Style.RESET_ALL}"*75)
 
                 for query in queries:
                     query = query.strip()
                     if query:
                         self.process_query(query, upgrade_egg)
+                        self.log(f"{Fore.CYAN+Style.BRIGHT}-{Style.RESET_ALL}"*75)
                         time.sleep(3)
-                        self.log(f"{Fore.CYAN+Style.BRIGHT}-------------------------------------------------------------------------{Style.RESET_ALL}")
 
                 seconds = 1800
                 while seconds > 0:
