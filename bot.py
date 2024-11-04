@@ -430,7 +430,7 @@ class Birds:
                     f"{Fore.MAGENTA+Style.BRIGHT}[ Account{Style.RESET_ALL}"
                     f"{Fore.WHITE+Style.BRIGHT} {create_user['name']} {Style.RESET_ALL}"
                     f"{Fore.MAGENTA+Style.BRIGHT}] [ Balance{Style.RESET_ALL}"
-                    f"{Fore.WHITE+Style.BRIGHT} {create_user['balance']} Birds {Style.RESET_ALL}"
+                    f"{Fore.WHITE+Style.BRIGHT} {create_user['balance']:.1f} Birds {Style.RESET_ALL}"
                     f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                 )
             user = self.get_user(query)
@@ -442,7 +442,7 @@ class Birds:
                 f"{Fore.MAGENTA+Style.BRIGHT}[ Account{Style.RESET_ALL}"
                 f"{Fore.WHITE+Style.BRIGHT} {user['name']} {Style.RESET_ALL}"
                 f"{Fore.MAGENTA+Style.BRIGHT}] [ Balance{Style.RESET_ALL}"
-                f"{Fore.WHITE+Style.BRIGHT} {user['balance']} Birds {Style.RESET_ALL}"
+                f"{Fore.WHITE+Style.BRIGHT} {user['balance']:.1f} Birds {Style.RESET_ALL}"
                 f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
             )
 
@@ -537,7 +537,7 @@ class Birds:
                             else:
                                 break
 
-                            time.sleep(1)
+                            time.sleep(1.5)
 
                         if count == 0:
                             claim = self.egg_claim(query)
@@ -595,7 +595,7 @@ class Birds:
                         f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
                         f"{Fore.WHITE+Style.BRIGHT} Level {incubate['level']} {Style.RESET_ALL}"
                         f"{Fore.MAGENTA+Style.BRIGHT}] [ Balance{Style.RESET_ALL}"
-                        f"{Fore.WHITE+Style.BRIGHT} {balance} Birds {Style.RESET_ALL}"
+                        f"{Fore.WHITE+Style.BRIGHT} {balance:.1f} Birds {Style.RESET_ALL}"
                         f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                     )
 
@@ -624,7 +624,7 @@ class Birds:
                                 f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
                                 f"{Fore.RED+Style.BRIGHT} Isn't Incubated {Style.RESET_ALL}"
                                 f"{Fore.MAGENTA+Style.BRIGHT}] [ Reason{Style.RESET_ALL}"
-                                f"{Fore.WHITE+Style.BRIGHT} -{need_more} Birds {Style.RESET_ALL}"
+                                f"{Fore.WHITE+Style.BRIGHT} -{need_more:.1f} Birds {Style.RESET_ALL}"
                                 f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                             )
 
@@ -670,7 +670,7 @@ class Birds:
                                         f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
                                         f"{Fore.RED+Style.BRIGHT} Isn't Incubated {Style.RESET_ALL}"
                                         f"{Fore.MAGENTA+Style.BRIGHT}] [ Reason{Style.RESET_ALL}"
-                                        f"{Fore.WHITE+Style.BRIGHT} -{need_more} Birds {Style.RESET_ALL}"
+                                        f"{Fore.WHITE+Style.BRIGHT} -{need_more:.1f} Birds {Style.RESET_ALL}"
                                         f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                                     )
                             else:
