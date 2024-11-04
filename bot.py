@@ -445,6 +445,7 @@ class Birds:
                 f"{Fore.WHITE+Style.BRIGHT} {user['balance']:.1f} Birds {Style.RESET_ALL}"
                 f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
             )
+            time.sleep(1)
 
             worms = self.worms_status(query)
             if worms:
@@ -485,6 +486,7 @@ class Birds:
                     f"{Fore.RED+Style.BRIGHT} Is None {Style.RESET_ALL}"
                     f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                 )
+            time.sleep(1)
 
             join = self.egg_join(query)
             if join:
@@ -499,6 +501,7 @@ class Birds:
                             f"{Fore.WHITE+Style.BRIGHT} {count} Left {Style.RESET_ALL}"
                             f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                         )
+                        time.sleep(1)
 
                         while count > 0:
                             join = self.egg_join(query)
@@ -567,6 +570,7 @@ class Birds:
                     self.log(f"{Fore.RED+Style.BRIGHT}[ Failed to Get Turn ]{Style.RESET_ALL}")
             else:
                 self.log(f"{Fore.RED+Style.BRIGHT}[ Failed to Join Egg Breaking ]{Style.RESET_ALL}")
+            time.sleep(1)
 
             if upgarde_egg:
                 incubate = self.incubate_info(query)
@@ -585,6 +589,7 @@ class Birds:
                             f"{Fore.WHITE+Style.BRIGHT} {complete_incubate_wib} {Style.RESET_ALL}"
                             f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                         )
+                        time.sleep(1)
 
                     incubate = self.incubate_info(query)
 
@@ -598,6 +603,7 @@ class Birds:
                         f"{Fore.WHITE+Style.BRIGHT} {balance:.1f} Birds {Style.RESET_ALL}"
                         f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                     )
+                    time.sleep(1)
 
                     status = incubate['status']
                     if status == "confirmed" and incubate['nextLevel']:
@@ -627,6 +633,7 @@ class Birds:
                                 f"{Fore.WHITE+Style.BRIGHT} -{need_more:.1f} Birds {Style.RESET_ALL}"
                                 f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                             )
+                        time.sleep(1)
 
                     elif status == "processing":
                         upgrade_time = incubate['upgradedAt'] / 1000
