@@ -67,7 +67,7 @@ class Birds:
         
     def get_user(self, query: str, retries=3):
         url = 'https://api.birds.dog/user'
-        self. headers.update({
+        self.headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
@@ -101,7 +101,7 @@ class Birds:
     def post_user(self, query: str, name: str, username: str, retries=3):
         url = 'https://api.birds.dog/user'
         data = json.dumps({'name':name, 'referId':'1493482017', 'username':username })
-        self. headers.update({
+        self.headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
@@ -131,7 +131,7 @@ class Birds:
         
     def worms_status(self, query: str, retries=3):
         url = 'https://worm.birds.dog/worms/mint-status'
-        self. headers.update({
+        self.headers.update({
             'Authorization': f'tma {query}',
             'Content-Type': 'application/json'
         })
@@ -163,7 +163,7 @@ class Birds:
     def mint_worms(self, query: str, retries=3):
         url = 'https://worm.birds.dog/worms/mint'
         data = {}
-        self. headers.update({
+        self.headers.update({
             'Authorization': f'tma {query}',
             'Content-Type': 'application/json'
         })
@@ -191,10 +191,130 @@ class Birds:
                     time.sleep(2)
                 else:
                     return None
+
+    def egg_join(self, query: str, retries=3):
+        url = 'https://api.birds.dog/minigame/egg/join'
+        self.headers.update({
+            'Telegramauth': f'tma {query}',
+            'Content-Type': 'application/json'
+        })
+
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    return response.json()
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
+        
+    def egg_turn(self, query: str, retries=3):
+        url = 'https://api.birds.dog/minigame/egg/turn'
+        self.headers.update({
+            'Telegramauth': f'tma {query}',
+            'Content-Type': 'application/json'
+        })
+
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    return response.json()
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
+        
+    def egg_play(self, query: str, retries=3):
+        url = 'https://api.birds.dog/minigame/egg/play'
+        self.headers.update({
+            'Telegramauth': f'tma {query}',
+            'Content-Type': 'application/json'
+        })
+
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    return response.json()
+                else:
+                    return None
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
+        
+    def egg_claim(self, query: str, retries=3):
+        url = 'https://api.birds.dog/minigame/egg/claim'
+        self.headers.update({
+            'Telegramauth': f'tma {query}',
+            'Content-Type': 'application/json'
+        })
+
+        for attempt in range(retries):
+            try:
+                response = self.session.get(url, headers=self.headers)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    return True
+                else:
+                    return False
+            except requests.RequestException as e:
+                if attempt < retries - 1:
+                    print(
+                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
+                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
+                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
+                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
+                        end="\r",
+                        flush=True
+                    )
+                    time.sleep(2)
+                else:
+                    return None
         
     def incubate_info(self, query: str, retries=3):
         url = 'https://api.birds.dog/minigame/incubate/info'
-        self. headers.update({
+        self.headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
@@ -228,7 +348,7 @@ class Birds:
         
     def incubate_upgrade(self, query: str, retries=3):
         url = 'https://api.birds.dog/minigame/incubate/upgrade'
-        self. headers.update({
+        self.headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
@@ -259,7 +379,7 @@ class Birds:
         
     def confirm_upgrade(self, query: str, retries=3):
         url = 'https://api.birds.dog/minigame/incubate/confirm-upgraded'
-        self. headers.update({
+        self.headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
@@ -286,10 +406,10 @@ class Birds:
                     time.sleep(2)
                 else:
                     return None
-        
-    def egg_join(self, query: str, retries=3):
-        url = 'https://api.birds.dog/minigame/egg/join'
-        self. headers.update({
+
+    def boost_speed(self, query: str, retries=3):
+        url = 'https://api.birds.dog/minigame/boost-speed'
+        self.headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
@@ -316,82 +436,22 @@ class Birds:
                     time.sleep(2)
                 else:
                     return None
-        
-    def egg_turn(self, query: str, retries=3):
-        url = 'https://api.birds.dog/minigame/egg/turn'
-        self. headers.update({
+
+    def update_speed(self, query: str, next_speed: int, retries=3):
+        url = 'https://api.birds.dog/minigame/boost-speed/update-speed'
+        data = json.dumps({'speed':next_speed})
+        self.headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
         })
 
         for attempt in range(retries):
             try:
-                response = self.session.get(url, headers=self.headers)
-                response.raise_for_status()
+                response = self.session.post(url, headers=self.headers, data=data)
                 if response.status_code == 200:
                     return response.json()
                 else:
                     return None
-            except requests.RequestException as e:
-                if attempt < retries - 1:
-                    print(
-                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
-                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
-                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
-                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
-                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
-                        end="\r",
-                        flush=True
-                    )
-                    time.sleep(2)
-                else:
-                    return None
-        
-    def egg_play(self, query: str, retries=3):
-        url = 'https://api.birds.dog/minigame/egg/play'
-        self. headers.update({
-            'Telegramauth': f'tma {query}',
-            'Content-Type': 'application/json'
-        })
-
-        for attempt in range(retries):
-            try:
-                response = self.session.get(url, headers=self.headers)
-                response.raise_for_status()
-                if response.status_code == 200:
-                    return response.json()
-                else:
-                    return None
-            except requests.RequestException as e:
-                if attempt < retries - 1:
-                    print(
-                        f"{Fore.CYAN + Style.BRIGHT}[ {datetime.now().astimezone(wib).strftime('%x %X %Z')} ]{Style.RESET_ALL}"
-                        f"{Fore.WHITE + Style.BRIGHT} | {Style.RESET_ALL}"
-                        f"{Fore.RED + Style.BRIGHT}[ HTTP ERROR ]{Style.RESET_ALL}"
-                        f"{Fore.YELLOW + Style.BRIGHT} Retrying... {Style.RESET_ALL}"
-                        f"{Fore.WHITE + Style.BRIGHT}[{attempt+1}/{retries}]{Style.RESET_ALL}",
-                        end="\r",
-                        flush=True
-                    )
-                    time.sleep(2)
-                else:
-                    return None
-        
-    def egg_claim(self, query: str, retries=3):
-        url = 'https://api.birds.dog/minigame/egg/claim'
-        self. headers.update({
-            'Telegramauth': f'tma {query}',
-            'Content-Type': 'application/json'
-        })
-
-        for attempt in range(retries):
-            try:
-                response = self.session.get(url, headers=self.headers)
-                response.raise_for_status()
-                if response.status_code == 200:
-                    return True
-                else:
-                    return False
             except requests.RequestException as e:
                 if attempt < retries - 1:
                     print(
@@ -428,11 +488,12 @@ class Birds:
             if create_user:
                 self.log(
                     f"{Fore.MAGENTA+Style.BRIGHT}[ Account{Style.RESET_ALL}"
-                    f"{Fore.WHITE+Style.BRIGHT} {create_user['name']} {Style.RESET_ALL}"
-                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Balance{Style.RESET_ALL}"
-                    f"{Fore.WHITE+Style.BRIGHT} {create_user['balance']:.1f} Birds {Style.RESET_ALL}"
+                    f"{Fore.WHITE+Style.BRIGHT} {name} {Style.RESET_ALL}"
+                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Result{Style.RESET_ALL}"
+                    f"{Fore.GREEN+Style.BRIGHT} Is Created {Style.RESET_ALL}"
                     f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                 )
+
             user = self.get_user(query)
 
         time.sleep(1)
@@ -572,39 +633,80 @@ class Birds:
                 self.log(f"{Fore.RED+Style.BRIGHT}[ Failed to Join Egg Breaking ]{Style.RESET_ALL}")
             time.sleep(1)
 
-            if upgarde_egg:
+            incubate = self.incubate_info(query)
+            if not incubate:
+                upgrade = self.incubate_upgrade(query)
+                if upgrade:
+                    upgrade_time = upgrade['upgradedAt'] / 1000
+                    duration = upgrade['duration'] * 3600
+                    complete_incubate = upgrade_time + duration
+                    complete_incubate_wib = datetime.fromtimestamp(complete_incubate).astimezone(wib).strftime('%x %X %Z')
+
+                    self.log(
+                        f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
+                        f"{Fore.GREEN+Style.BRIGHT} Is Incubated {Style.RESET_ALL}"
+                        f"{Fore.MAGENTA+Style.BRIGHT}] [ Complete at{Style.RESET_ALL}"
+                        f"{Fore.WHITE+Style.BRIGHT} {complete_incubate_wib} {Style.RESET_ALL}"
+                        f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                    )
+                    time.sleep(1)
+
                 incubate = self.incubate_info(query)
-                if not incubate:
-                    upgrade = self.incubate_upgrade(query)
-                    if upgrade:
-                        upgrade_time = upgrade['upgradedAt'] / 1000
-                        duration = upgrade['duration'] * 3600
-                        complete_incubate = upgrade_time + duration
-                        complete_incubate_wib = datetime.fromtimestamp(complete_incubate).astimezone(wib).strftime('%x %X %Z')
 
-                        self.log(
-                            f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
-                            f"{Fore.GREEN+Style.BRIGHT} Is Incubated {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA+Style.BRIGHT}] [ Complete at{Style.RESET_ALL}"
-                            f"{Fore.WHITE+Style.BRIGHT} {complete_incubate_wib} {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
-                        )
-                        time.sleep(1)
-
-                    incubate = self.incubate_info(query)
-
-                if incubate:
-                    user = self.get_user(query)
-                    balance = user['balance']
+            if incubate:
+                balance = self.get_user(query)['balance']
+                boost = self.boost_speed(query)
+                if boost:
+                    current_speed = boost['speed']
                     self.log(
                         f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
                         f"{Fore.WHITE+Style.BRIGHT} Level {incubate['level']} {Style.RESET_ALL}"
                         f"{Fore.MAGENTA+Style.BRIGHT}] [ Balance{Style.RESET_ALL}"
                         f"{Fore.WHITE+Style.BRIGHT} {balance:.1f} Birds {Style.RESET_ALL}"
+                        f"{Fore.MAGENTA+Style.BRIGHT}] [ Speed{Style.RESET_ALL}"
+                        f"{Fore.WHITE+Style.BRIGHT} x{current_speed} {Style.RESET_ALL}"
                         f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                     )
                     time.sleep(1)
 
+                    boost_level = [1, 1.2, 1.4, 1.6, 1.8, 2, 2.5]
+                    if current_speed in boost_level:
+                        current_index = boost_level.index(current_speed)
+                        if current_index + 1 < len(boost_level):
+                            next_speed = boost_level[current_index + 1]
+
+                            update_boost = self.update_speed(query, next_speed)
+                            if update_boost:
+                                self.log(
+                                    f"{Fore.MAGENTA+Style.BRIGHT}[ Boost Speed{Style.RESET_ALL}"
+                                    f"{Fore.GREEN+Style.BRIGHT} Is Upgraded {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Spped{Style.RESET_ALL}"
+                                    f"{Fore.WHITE+Style.BRIGHT} x{next_speed} {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                                )
+                            else:
+                                self.log(
+                                    f"{Fore.MAGENTA+Style.BRIGHT}[ Boost Speed{Style.RESET_ALL}"
+                                    f"{Fore.RED+Style.BRIGHT} Isn't Upgraded {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}] [ Reason{Style.RESET_ALL}"
+                                    f"{Fore.WHITE+Style.BRIGHT} Not Eligible {Style.RESET_ALL}"
+                                    f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                                )
+                        else:
+                            self.log(
+                                f"{Fore.MAGENTA+Style.BRIGHT}[ Boost Speed{Style.RESET_ALL}"
+                                f"{Fore.GREEN+Style.BRIGHT} Already at The Maximum Speed Level {Style.RESET_ALL}"
+                                f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                            )
+                    else:
+                        self.log(
+                            f"{Fore.MAGENTA+Style.BRIGHT}[ Boost Speed{Style.RESET_ALL}"
+                            f"{Fore.RED+Style.BRIGHT} Current Speed Not Found in Boost Levels {Style.RESET_ALL}"
+                            f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                        )
+                    time.sleep(1)
+
+                if upgarde_egg:
                     status = incubate['status']
                     if status == "confirmed" and incubate['nextLevel']:
                         required_balance = incubate['nextLevel']['birds']
@@ -613,8 +715,9 @@ class Birds:
                             upgrade = self.incubate_upgrade(query)
                             if upgrade:
                                 upgrade_time = upgrade['upgradedAt'] / 1000
-                                duration = upgrade['duration'] * 3600
-                                complete_incubate = upgrade_time + duration
+                                booster = incubate['speed']
+                                duration_with_boost = duration / booster
+                                complete_incubate = upgrade_time + duration_with_boost
                                 complete_incubate_wib = datetime.fromtimestamp(complete_incubate).astimezone(wib).strftime('%x %X %Z')
 
                                 self.log(
@@ -638,7 +741,9 @@ class Birds:
                     elif status == "processing":
                         upgrade_time = incubate['upgradedAt'] / 1000
                         duration = incubate['duration'] * 3600
-                        complete_incubate = upgrade_time + duration
+                        booster = incubate['speed']
+                        duration_with_boost = duration / booster
+                        complete_incubate = upgrade_time + duration_with_boost
                         complete_incubate_datetime = datetime.fromtimestamp(complete_incubate, wib)
 
                         formatted_time = complete_incubate_datetime.strftime('%x %X %Z')
@@ -660,8 +765,9 @@ class Birds:
                                     upgrade = self.incubate_upgrade(query)
                                     if upgrade:
                                         upgrade_time = upgrade['upgradedAt'] / 1000
-                                        duration = upgrade['duration'] * 3600
-                                        complete_incubate = upgrade_time + duration
+                                        booster = incubate['speed']
+                                        duration_with_boost = duration / booster
+                                        complete_incubate = upgrade_time + duration_with_boost
                                         complete_incubate_wib = datetime.fromtimestamp(complete_incubate).astimezone(wib).strftime('%x %X %Z')
 
                                         self.log(
@@ -700,13 +806,14 @@ class Birds:
                             f"{Fore.YELLOW+Style.BRIGHT} Is Reached Max Level {Style.RESET_ALL}"
                             f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                         )
-            else:
-                self.log(
-                    f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
-                    f"{Fore.WHITE+Style.BRIGHT} Incubate and Upgrade {Style.RESET_ALL}"
-                    f"{Fore.YELLOW+Style.BRIGHT}Skipped{Style.RESET_ALL}"
-                    f"{Fore.MAGENTA+Style.BRIGHT} ]{Style.RESET_ALL}"
-                )
+                else:
+                    self.log(
+                        f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
+                        f"{Fore.WHITE+Style.BRIGHT} Incubate and Upgrade {Style.RESET_ALL}"
+                        f"{Fore.YELLOW+Style.BRIGHT}Skipped{Style.RESET_ALL}"
+                        f"{Fore.MAGENTA+Style.BRIGHT} ]{Style.RESET_ALL}"
+                    )
+                time.sleep(1)
 
     def main(self):
         try:
