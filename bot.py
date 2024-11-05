@@ -715,6 +715,7 @@ class Birds:
                             upgrade = self.incubate_upgrade(query)
                             if upgrade:
                                 upgrade_time = upgrade['upgradedAt'] / 1000
+                                duration = upgrade['duration'] * 3600
                                 booster = incubate['speed']
                                 duration_with_boost = duration / booster
                                 complete_incubate = upgrade_time + duration_with_boost
@@ -764,7 +765,8 @@ class Birds:
                                 if user['balance'] >= required_balance:
                                     upgrade = self.incubate_upgrade(query)
                                     if upgrade:
-                                        upgrade_time = upgrade['upgradedAt'] / 1000
+                                        upgrade_time = incubate['upgradedAt'] / 1000
+                                        duration = incubate['duration'] * 3600
                                         booster = incubate['speed']
                                         duration_with_boost = duration / booster
                                         complete_incubate = upgrade_time + duration_with_boost
