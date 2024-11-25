@@ -356,6 +356,14 @@ class Birds:
         for attempt in range(retries):
             try:
                 response = self.session.get(url, headers=self.headers)
+                if response.status_code == 400:
+                    self.log(
+                        f"{Fore.MAGENTA+Style.BRIGHT}[ Egg{Style.RESET_ALL}"
+                        f"{Fore.GREEN+Style.BRIGHT} Is Reached Max Level {Style.RESET_ALL}"
+                        f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                    )
+                    return
+                
                 response.raise_for_status()
                 result = response.json()
                 if result:
