@@ -57,10 +57,10 @@ class Birds:
         if query:
             user_data_json = urllib.parse.unquote(query)
             user_data = json.loads(user_data_json)
-            first_name = user_data['first_name']
-            last_name = user_data['last_name']
+            first_name = user_data.get('first_name', '')
+            last_name = user_data.get('last_name', '')
             name = f"{first_name} {last_name}"
-            username = user_data['username']
+            username = user_data.get('username', '')
             return name, username
         else:
             raise ValueError("User data not found in query.")
