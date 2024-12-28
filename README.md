@@ -1,7 +1,7 @@
 # Birds BOT
 Birds BOTs
 
-Register Here : [Birds](https://t.me/birdx2_bot/birdx?startapp=1493482017)
+Register Here : [Birds](https://t.me/birdx2_bot/birdx?startapp=7143283584)
 
 ## Fitur
 

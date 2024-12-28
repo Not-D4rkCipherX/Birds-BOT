@@ -24,6 +24,7 @@ class Birds:
             'Sec-Fetch-Site': 'same-site',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0'
         }
+        self.id = '7143283584'
 
     def clear_terminal(self):
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -100,7 +101,7 @@ class Birds:
         
     def post_user(self, query: str, name: str, username: str, retries=3):
         url = 'https://api.birds.dog/user'
-        data = json.dumps({'name':name, 'referId':'1493482017', 'username':username })
+        data = json.dumps({'name':name, 'referId':self.id, 'username':username })
         self.headers.update({
             'Telegramauth': f'tma {query}',
             'Content-Type': 'application/json'
