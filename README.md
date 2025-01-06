@@ -1,15 +1,16 @@
-# Birds BOT
-Birds BOTs
+# Birds SUI BOT
+Birds SUI BOT
 
-Register Here : [Birds](https://t.me/birdx2_bot/birdx?startapp=7143283584)
+Register Here : [Birds SUI](https://t.me/birdx2_bot/birdx?startapp=7143283584)
 
 ## Fitur
 
   - Auto Get Account Information
   - Auto Mint Worms
-  - Auto Incubate and Upgrade Egg [y/n]
   - Auto Breaking Egg
-  - Multi Account
+  - Auto Upgrade Boost Speed Level
+  - Auto Incubate and Upgrade Egg [y/n]
+  - Multi Accounts
 
   `Note:` No Complete Task Cause' Captcha
 
