@@ -836,7 +836,7 @@ class Birds:
 
     async def main(self):
         try:
-            with open('data.txt', 'r') as file:
+            with open('query.txt', 'r') as file:
                 queries = [line.strip() for line in file if line.strip()]
 
             upgrade_egg = self.question()
